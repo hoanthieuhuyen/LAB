@@ -15,6 +15,7 @@ namespace THA.WEB
     public class UserController : BaseController
     {
         // GET: User
+        // chu thich
         UserDAO userDao = new UserDAO();
         public ActionResult Index()
         {
