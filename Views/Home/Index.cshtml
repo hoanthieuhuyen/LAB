@@ -1,0 +1,50 @@
+﻿
+@using Kendo.Mvc.UI;
+@using THA.WEB;
+
+@{
+    ViewBag.Title = "Trang chủ";
+}
+@section header{Trang chủ}
+
+<h2>Orders</h2>
+@(Html.Kendo().Grid<OrderViewModel>()
+        .Name("gridKendo")
+        .Columns(columns =>
+        {
+            columns.Bound(o => o.OrderID);
+            columns.Bound(o => o.CustomerID);
+            columns.Bound(o => o.OrderDate).Format("{0:MM/dd/yyyy}").Width(190).EditorTemplateName("DateTime");
+            columns.Bound(o => o.ShipName);
+            columns.Bound(o => o.ShipAddress).Width(110);
+            columns.Bound(o => o.ShipCity).Width(110);
+            columns.Command(command => { command.Edit(); command.Destroy(); }).Width(220);
+        })
+        .Editable(editable => editable.Mode(GridEditMode.InLine))        
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5))
+        .DataSource(dataSource => dataSource
+            .WebApi()
+            .PageSize(20)
+            .ServerOperation(false)             
+            .Model(model =>
+                {
+                    model.Id(o => o.OrderID);
+                    model.Field(o => o.OrderID).Editable(false);
+                    model.Field(o => o.CustomerID).Editable(false);
+                })
+            .Read(read => read.Url(Url.HttpRouteUrl("ActionApi", new { controller = "ApiHome", action = "ReadOrders" })))
+            .Update(update => update.Url(Url.HttpRouteUrl("ActionApi", new { controller = "ApiHome", action = "EditOrders" })))
+            .Destroy(update => update.Url(Url.HttpRouteUrl("ActionApi", new { controller = "ApiHome", action = "DeleteOrders" })))
+            .Events(events => events.Sync("sync_handler"))
+        )
+    )
+
+<script>
+    function sync_handler(e)
+    {
+        this.read();
+    }
+</script>

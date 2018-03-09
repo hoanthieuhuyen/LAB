@@ -1,0 +1,54 @@
+﻿@using Kendo.Mvc.UI
+@using THA.MODEL
+
+@{
+    ViewBag.Title = "ListUser";
+}
+
+<h2>ListUser</h2>
+<div class="form-horizontal">
+    <div class="form-group">
+        @(Html.Kendo().Button().Events(e=>e.Click())
+        .Name("btnThemMoi")
+        .HtmlAttributes(new { type = "button", @class = "btn btn-primary pull-right" })
+        .Content("Thêm mới"))
+        
+    </div>
+    <div class="form-group">
+        @(Html.Kendo().Grid<UserViewModel>()
+        .Name("gridUser")
+        .Columns(columns =>
+        {
+            columns.Bound(o => o.USERID);
+            columns.Bound(o => o.USERNAME);
+            columns.Bound(o => o.FULLNAME).Width(110);
+            columns.Command(command => { command.Edit(); command.Destroy(); }).Width(220);
+        })
+        .Editable(editable => editable.Mode(GridEditMode.InLine))
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5))
+        .DataSource(dataSource => dataSource
+            .WebApi()
+            .PageSize(20)
+            .ServerOperation(false)
+            .Model(model =>
+            {
+                model.Id(o => o.USERID);
+                model.Field(o => o.USERNAME).Editable(false);
+                model.Field(o => o.FULLNAME).Editable(true);
+            })
+            .Read(read => read.Url(Url.HttpRouteUrl("ActionApi", new { controller = "ApiUser", action = "ReadUsers" })))
+            .Update(update => update.Url(Url.HttpRouteUrl("ActionApi", new { controller = "ApiHome", action = "EditOrders" })))
+            .Destroy(update => update.Url(Url.HttpRouteUrl("ActionApi", new { controller = "ApiHome", action = "DeleteOrders" })))
+            .Events(events => events.Sync("sync_handler"))
+        )
+        )
+    </div>
+</div>
+<script>
+    function sync_handler(e) {
+        this.read();
+    }
+</script>

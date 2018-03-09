@@ -1,0 +1,94 @@
+﻿@using Kendo.Mvc.UI
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/css/kendo/2014.2.903/kendo.common-bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/css/kendo/2014.2.903/kendo.bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="~/Scripts/jquery-1.11.1.js"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+    
+    <script src="~/Scripts/kendo/2014.2.903/kendo.web.min.js"></script>
+    <script src="~/Scripts/kendo/2014.2.903/kendo.all.min.js"></script>
+    <script src="~/Scripts/kendo/2014.2.903/kendo.aspnetmvc.min.js"></script>
+
+    <style>
+        #megaStore {
+            max-width: 600px;
+            margin: 30px auto;
+            padding-top: 120px;
+            background: url('../content/web/menu/header.jpg') no-repeat center 0;
+        }
+
+        #menu h2 {
+            font-size: 1em;
+            text-transform: uppercase;
+            padding: 5px 10px;
+        }
+
+        #template img {
+            margin: 5px 20px 0 0;
+            float: left;
+        }
+
+        #template {
+            width: 380px;
+        }
+
+            #template ol {
+                float: left;
+                margin: 0 0 0 30px;
+                padding: 10px 10px 0 10px;
+            }
+
+            #template:after {
+                content: ".";
+                display: block;
+                height: 0;
+                clear: both;
+                visibility: hidden;
+            }
+
+            #template .k-button {
+                float: left;
+                clear: left;
+                margin: 5px 0 5px 12px;
+            }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">            
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("Using Kendo UI Grid With ASP.NET MVC5 WebAPI", "Index", "Home", null, new { @class = "navbar-brand" })                             
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav"></ul>
+                </div>
+            </div>
+    </div>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

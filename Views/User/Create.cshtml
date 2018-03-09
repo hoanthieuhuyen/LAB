@@ -1,0 +1,100 @@
+﻿@model THA.MODEL.H_USERS
+@using Kendo.Mvc.UI
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section header{Quản trị người dùng}
+
+<div class="row">
+    <div class="col-lg-12">
+        <p>
+            <span class="glyphicon glyphicon-user"></span>
+            @Html.ActionLink("Trở lại danh sách", "Index")
+        </p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Thêm mới người dùng
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        @using (Html.BeginForm("Create", "User", FormMethod.Post))
+                        {
+                            <fieldset>
+                                @Html.AntiForgeryToken()
+
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.USERID, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @(Html.Kendo().NumericTextBoxFor(model => model.USERID))
+                                    @Html.ValidationMessageFor(model => model.USERID, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.USERNAME, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                    @(Html.Kendo().TextBoxFor(model => model.USERNAME))
+                                    @Html.ValidationMessageFor(model => model.USERNAME, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.PASSWORD, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                    @(Html.Kendo().TextBoxFor(model => model.PASSWORD).HtmlAttributes(new { @type = "password" }))
+                                    @Html.ValidationMessageFor(model => model.PASSWORD, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.FULLNAME, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                    @(Html.Kendo().TextBoxFor(model => model.FULLNAME))
+                                    @Html.ValidationMessageFor(model => model.FULLNAME, "", new { @class = "text-danger" })
+
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.MA_DV, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @(Html.Kendo().DropDownListFor(model => model.MA_DV)
+                                                                .DataValueField("MADONVI")
+                                                                .DataTextField("TENDONVI")                                                               
+                                                                .DataSource(source =>
+                                                                {                                                                    
+                                                                    source.Read(read => { read.Action("GetDonVi", "User"); }).ServerFiltering(true);
+                                                                }
+                                                                ).SelectedIndex(0))
+                                    @Html.ValidationMessageFor(model => model.MA_DV, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.NGAY_TAO, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @(Html.Kendo().DatePickerFor(model => model.NGAY_TAO)
+
+                                    .Format("dd/MM/yyyy")
+                                    )
+                                    @Html.ValidationMessageFor(model => model.NGAY_TAO, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.STATUS, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                    @Html.CheckBoxFor(model => model.STATUS, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.STATUS, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Tạo mới" class="btn btn-default" />
+                                </div>
+                            </fieldset>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

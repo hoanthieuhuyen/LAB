@@ -1,0 +1,125 @@
+﻿@using THA.MODEL
+@using Kendo.Mvc.UI
+@model System.Data.DataTable
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section header{Danh sách người dùng}
+
+<div class="row">
+    <div class="col-lg-12">
+        @*@(Html.Kendo().Grid<H_USERS>()
+                .Name("grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.USERID).Filterable(false);
+                    columns.Bound(p => p.USERNAME);
+                    columns.Bound(p => p.FULLNAME);
+                    columns.Bound(p => p.NGAY_TAO).Format("{0:MM/dd/yyyy}");
+                    columns.Bound(p => p.MA_DV);
+                    columns.Bound(p => p.STATUS);
+                })
+                .Pageable()
+                .Sortable()
+                .Scrollable()
+                .Filterable()
+                .HtmlAttributes(new { style = "height:550px;" })
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .PageSize(20)
+                    .Read(read => read.Action("User_ReadList", "User"))
+                 )
+            )*@
+        <p>
+            @Html.ActionLink("Thêm mới người dùng", "Create", "User", new { @class = "btn btn-success" })
+        </p>
+        @(Html.Kendo().Grid<dynamic>()
+            .Name("Grid1")
+            .Columns(columns =>
+            {
+            foreach (System.Data.DataColumn column in Model.Columns)
+            {
+                var c = columns.Bound(column.ColumnName);
+                if (column.ColumnName == "NGAY_TAO")
+                {
+                    c.Format("{0:dd/MM/yyyy}");
+                    c.Title("Ngày tạo");
+                }
+                else if (column.ColumnName == "STT")
+                {
+                    c.Title("STT");
+                    c.Width(50);
+                    c.HtmlAttributes(new { @style = "text-align:center;" });
+                    c.Filterable(false);
+                }
+                else if (column.ColumnName == "USERID")
+                {
+                    c.Title("ID");
+                    c.Width(70);
+                }
+                else if (column.ColumnName == "USERNAME")
+                {
+                    c.Title("Tên đăng nhập");
+                    c.Width(150);
+                }
+                else if (column.ColumnName == "FULLNAME")
+                {
+                    c.Title("Họ tên");
+                    c.Width(130);
+                }
+                else if (column.ColumnName == "MA_DV")
+                {
+                    c.Title("Đơn vị");
+                }
+                else if (column.ColumnName == "STATUS")
+                {
+                    c.Title("Trạng thái");
+                }
+                else if (column.ColumnName == "PASSWORD")
+                {
+                    c.Title("Mật khẩu");
+                    c.Visible(false);
+                }
+            }
+            //columns.Command(cmd => cmd.Edit().Text("Sửa").UpdateText("Lưu").CancelText("Bỏ qua"));
+            columns.Template(@<text></text>).ClientTemplate("<a class='btn btn-default' href='" + Url.Action("Edit", "User") + "/#=USERID#'>Sửa</a>").Width(70);
+            columns.Command(cmd => cmd.Destroy().Text("Xóa")).Width(100);
+
+            })
+            .Pageable()
+            .Sortable()
+            .Editable(ed => ed.Mode(GridEditMode.PopUp).DisplayDeleteConfirmation("Bạn có đồng ý xóa bản ghi này không?").Window(e => e.Title("dddd")))
+            .Filterable()
+            .Groupable()
+            .Selectable()
+            .Scrollable(se=>se.Height(300))
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Model(model =>
+                {
+                    //var id = Model.PrimaryKey[0].ColumnName;
+                    model.Id("USERID");
+                    foreach (System.Data.DataColumn column in Model.Columns)
+                    {
+                        var field = model.Field(column.ColumnName, column.DataType);
+                        if (column.ColumnName == "USERID")
+                        {
+                            field.Editable(false);
+                        }
+
+                    }
+                })
+                //.Aggregates(a =>
+                //{
+                //    a.Add("UnitPrice", typeof(decimal?)).Sum();
+                //    a.Add("UnitsInStock", typeof(short?)).Average().Max();
+                //})
+                .Read(read => read.Action("User_ReadTable", "User"))
+                .Update(update => update.Action("Update", "User"))
+                .Destroy(delete => delete.Action("Delete", "User"))
+            )
+        )
+    </div>
+</div>
